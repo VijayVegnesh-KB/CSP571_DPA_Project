@@ -2205,3 +2205,47 @@ print(specificity)
 
 #####################################
 
+#####################################
+# Install and load the lattice package if not already installed
+if (!requireNamespace("lattice", quietly = TRUE)) {
+  install.packages("lattice")
+}
+library(lattice)
+
+# Example confusion matrix
+confusion_matrix <- matrix(c(30, 5, 10, 15), nrow = 2, byrow = TRUE)
+
+# Set row and column names
+rownames(confusion_matrix) <- c("Actual Negative", "Actual Positive")
+colnames(confusion_matrix) <- c("Predicted Negative", "Predicted Positive")
+dev.off()
+graphics.off()
+
+# Create a levelplot for the confusion matrix
+levelplot(confusion_matrix, col.regions = colorRampPalette(c("orange", "black"))(100),
+          main = "Confusion Matrix Levelplot", scales = list(cex = 0.8),
+          colorkey = list(space = "bottom", width = 0.7, height = 0.3, cex.axis = 0.8),
+          xlab = "Predicted", ylab = "Actual")
+####################
+
+# Precision, Recall, and F1 Score Calculation
+TP <- confusion_matrix[2, 2]
+TN <- confusion_matrix[1, 1]
+FP <- confusion_matrix[1, 2]
+FN <- confusion_matrix[2, 1]
+
+precision <- TP / (TP + FP)
+recall <- TP / (TP + FN)
+f1_score <- 2 * (precision * recall) / (precision + recall)
+
+# Print the results
+cat("Precision:", precision, "\n")
+cat("Recall:", recall, "\n")
+cat("F1 Score:", f1_score, "\n")
+
+sensitivity <- TP / (TP + FN)
+specificity <- TN / (TN + FP)
+
+# Print the results
+cat("Sensitivity (Recall):", sensitivity, "\n")
+cat("Specificity:", specificity,"\n")
